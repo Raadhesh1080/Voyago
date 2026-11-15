@@ -239,7 +239,7 @@ chmod +x setup.sh
 ## Support & Maintenance
 
 - Monitor logs: `docker-compose logs -f`
-- Check health: `curl http://localhost:3000/health`
+- Check health: `docker compose ps` (every service should show "healthy")
 - View traces: http://localhost:16686
 - Database backup: See DEPLOYMENT.md
 - Scale services: `docker-compose up -d --scale service-name=N`

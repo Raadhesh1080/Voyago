@@ -95,11 +95,11 @@ cd services/auth-service && npm test
 
 | Service | Port | URL | Status |
 |---------|------|-----|--------|
-| API Gateway | 3000 | http://localhost:3000 | ✅ |
-| Auth Service | 3001 | http://localhost:3001 | ✅ |
-| User Service | 3002 | http://localhost:3002 | ✅ |
-| Trip Service | 3003 | http://localhost:3003 | ✅ |
-| Payment Service | 3004 | http://localhost:3004 | ✅ |
+| API Gateway | 443 (via nginx) | https://localhost/api | ✅ |
+| Auth Service | 3001 (internal) | via API gateway | ✅ |
+| User Service | 3002 (internal) | via API gateway | ✅ |
+| Trip Service | 3003 (internal) | via API gateway | ✅ |
+| Payment Service | 3004 (internal) | via API gateway | ✅ |
 | Admin Dashboard | 3005 | https://localhost | ✅ |
 | PostgreSQL | 5432 | localhost:5432 | ✅ |
 | Neo4j | 7474/7687 | http://localhost:7474 | ✅ |

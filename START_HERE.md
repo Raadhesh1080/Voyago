@@ -2,7 +2,7 @@
 
 ## ✅ Project Status: COMPLETE
 
-All 39 files have been created successfully. The Voyago is ready to deploy.
+All 39 files have been created successfully. Voyago is ready to deploy.
 
 ## 📋 Next Steps
 
@@ -16,7 +16,7 @@ newgrp docker
 ### 2. Start the System
 
 ```bash
-cd ~/Desktop/voyago
+cd voyago
 docker compose up -d --build
 ```
 
@@ -128,10 +128,6 @@ docker compose up -d --scale trip-service=3
 |---------|-----|
 | Admin Dashboard | https://localhost |
 | API Gateway | https://localhost/api |
-| Auth Service | http://localhost:3001 |
-| User Service | http://localhost:3002 |
-| Trip Service | http://localhost:3003 |
-| Payment Service | http://localhost:3004 |
 | Jaeger UI | http://localhost:16686 |
 | Neo4j Browser | http://localhost:7474 |
 | Vault | http://localhost:8200 |

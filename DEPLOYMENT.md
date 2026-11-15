@@ -142,7 +142,7 @@ vault kv put secret/voyago-app \
 1. **Access Jaeger UI**: http://localhost:16686
 2. **Check service health**:
 ```bash
-curl http://localhost:3000/health
+docker compose ps   # every service should show "healthy"
 ```
 
 3. **View logs**:

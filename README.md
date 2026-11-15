@@ -14,6 +14,7 @@
 - [Prerequisites](#prerequisites)
 - [Quick Start](#quick-start)
   - [Docker (Recommended)](#option-1-docker-recommended)
+  - [Windows (PowerShell)](#windows-powershell)
   - [Local Development](#option-2-local-development)
 - [Environment Variables](#environment-variables)
 - [API Reference](#api-reference)
@@ -123,7 +124,7 @@ cp .env.example .env
 sudo usermod -aG docker $USER && newgrp docker
 ```
 
-**3. Generate SSL certificates**
+**3. Generate SSL certificates** (on Windows, see [Windows (PowerShell)](#windows-powershell))
 
 ```bash
 ./generate-ssl.sh
@@ -151,6 +152,38 @@ docker compose ps
 | **Password** | Admin@123 |
 
 > Accept the self-signed SSL certificate warning in your browser.
+
+---
+
+### Windows (PowerShell)
+
+Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) (choose **AMD64** for Intel/AMD PCs) with the WSL 2 option, open it, and wait for "Engine running". Then, in PowerShell from the project folder:
+
+**1. Create your settings file**
+
+```powershell
+Copy-Item .env.example .env
+```
+
+**2. Generate SSL certificates** (`./generate-ssl.sh` doesn't run in PowerShell; this uses the OpenSSL bundled with Git for Windows)
+
+```powershell
+New-Item -ItemType Directory -Force nginx\ssl
+& "C:\Program Files\Git\usr\bin\openssl.exe" req -x509 -nodes -days 365 -newkey rsa:2048 -keyout nginx\ssl\key.pem -out nginx\ssl\cert.pem -subj "/CN=localhost"
+```
+
+**3. Start, check, and open**
+
+```powershell
+docker compose up -d --build
+docker compose ps
+```
+
+Open https://localhost, click **Advanced → Proceed to localhost**, and log in with `admin@voyago.com` / `Admin@123`.
+
+**Stop:** `docker compose down`  ·  **Stop and wipe all data:** `docker compose down -v`
+
+> If image downloads fail with `server gave HTTP response to HTTPS client` right after installing Docker, pull the images one at a time (`docker pull nginx:alpine`, etc.) and run `docker compose up -d --build` again.
 
 ---
 
