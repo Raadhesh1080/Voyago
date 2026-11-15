@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import Users from './components/Users';
-import Travels from './components/Trips';
+import Trips from './components/Trips';
 import PaymentMethods from './components/PaymentMethods';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
@@ -35,7 +35,7 @@ function App() {
             <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>}>
               <Route index element={<Navigate to="/users" />} />
               <Route path="users" element={<Users />} />
-              <Route path="travels" element={<Travels />} />
+              <Route path="trips" element={<Trips />} />
               <Route path="payment-methods" element={<PaymentMethods />} />
             </Route>
           </Routes>

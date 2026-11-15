@@ -6,39 +6,39 @@ import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
-const Travels = () => {
-  const [travels, setTravels] = useState([]);
+const Trips = () => {
+  const [trips, setTrips] = useState([]);
   const [open, setOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [currentTravel, setCurrentTravel] = useState({
+  const [currentTrip, setCurrentTrip] = useState({
     title: '', description: '', price: '', durationDays: '', startDate: '', endDate: '', maxParticipants: '', status: 'active'
   });
 
   useEffect(() => {
-    fetchTravels();
+    fetchTrips();
   }, []);
 
-  const fetchTravels = async () => {
+  const fetchTrips = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/travels`);
-      setTravels(response.data.travels);
+      const response = await axios.get(`${API_URL}/api/trips`);
+      setTrips(response.data.trips);
     } catch (error) {
-      toast.error('Failed to fetch travels');
+      toast.error('Failed to fetch trips');
     }
   };
 
-  const handleOpen = (travel = null) => {
-    if (travel) {
-      setCurrentTravel({
-        ...travel,
-        durationDays: travel.duration_days,
-        startDate: travel.start_date,
-        endDate: travel.end_date,
-        maxParticipants: travel.max_participants
+  const handleOpen = (trip = null) => {
+    if (trip) {
+      setCurrentTrip({
+        ...trip,
+        durationDays: trip.duration_days,
+        startDate: trip.start_date,
+        endDate: trip.end_date,
+        maxParticipants: trip.max_participants
       });
       setEditMode(true);
     } else {
-      setCurrentTravel({ title: '', description: '', price: '', durationDays: '', startDate: '', endDate: '', maxParticipants: '', status: 'active' });
+      setCurrentTrip({ title: '', description: '', price: '', durationDays: '', startDate: '', endDate: '', maxParticipants: '', status: 'active' });
       setEditMode(false);
     }
     setOpen(true);
@@ -46,19 +46,19 @@ const Travels = () => {
 
   const handleClose = () => {
     setOpen(false);
-    setCurrentTravel({ title: '', description: '', price: '', durationDays: '', startDate: '', endDate: '', maxParticipants: '', status: 'active' });
+    setCurrentTrip({ title: '', description: '', price: '', durationDays: '', startDate: '', endDate: '', maxParticipants: '', status: 'active' });
   };
 
   const handleSave = async () => {
     try {
       if (editMode) {
-        await axios.put(`${API_URL}/api/travels/${currentTravel.id}`, currentTravel);
-        toast.success('Travel updated successfully');
+        await axios.put(`${API_URL}/api/trips/${currentTrip.id}`, currentTrip);
+        toast.success('Trip updated successfully');
       } else {
-        await axios.post(`${API_URL}/api/travels`, currentTravel);
-        toast.success('Travel created successfully');
+        await axios.post(`${API_URL}/api/trips`, currentTrip);
+        toast.success('Trip created successfully');
       }
-      fetchTravels();
+      fetchTrips();
       handleClose();
     } catch (error) {
       toast.error(error.response?.data?.error || 'Operation failed');
@@ -66,13 +66,13 @@ const Travels = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this travel?')) {
+    if (window.confirm('Are you sure you want to delete this trip?')) {
       try {
-        await axios.delete(`${API_URL}/api/travels/${id}`);
-        toast.success('Travel deleted successfully');
-        fetchTravels();
+        await axios.delete(`${API_URL}/api/trips/${id}`);
+        toast.success('Trip deleted successfully');
+        fetchTrips();
       } catch (error) {
-        toast.error('Failed to delete travel');
+        toast.error('Failed to delete trip');
       }
     }
   };
@@ -80,9 +80,9 @@ const Travels = () => {
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-        <Typography variant="h4">Travels Management</Typography>
+        <Typography variant="h4">Trips Management</Typography>
         <Button variant="contained" startIcon={<Add />} onClick={() => handleOpen()}>
-          Add Travel
+          Add Trip
         </Button>
       </Box>
 
@@ -99,18 +99,18 @@ const Travels = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {travels.map((travel) => (
-              <TableRow key={travel.id}>
-                <TableCell>{travel.title}</TableCell>
-                <TableCell>${travel.price}</TableCell>
-                <TableCell>{travel.duration_days}</TableCell>
-                <TableCell>{new Date(travel.start_date).toLocaleDateString()}</TableCell>
-                <TableCell>{travel.status}</TableCell>
+            {trips.map((trip) => (
+              <TableRow key={trip.id}>
+                <TableCell>{trip.title}</TableCell>
+                <TableCell>${trip.price}</TableCell>
+                <TableCell>{trip.duration_days}</TableCell>
+                <TableCell>{new Date(trip.start_date).toLocaleDateString()}</TableCell>
+                <TableCell>{trip.status}</TableCell>
                 <TableCell>
-                  <IconButton onClick={() => handleOpen(travel)} color="primary">
+                  <IconButton onClick={() => handleOpen(trip)} color="primary">
                     <Edit />
                   </IconButton>
-                  <IconButton onClick={() => handleDelete(travel.id)} color="error">
+                  <IconButton onClick={() => handleDelete(trip.id)} color="error">
                     <Delete />
                   </IconButton>
                 </TableCell>
@@ -121,13 +121,13 @@ const Travels = () => {
       </TableContainer>
 
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-        <DialogTitle>{editMode ? 'Edit Travel' : 'Add Travel'}</DialogTitle>
+        <DialogTitle>{editMode ? 'Edit Trip' : 'Add Trip'}</DialogTitle>
         <DialogContent>
           <TextField
             fullWidth
             label="Title"
-            value={currentTravel.title}
-            onChange={(e) => setCurrentTravel({ ...currentTravel, title: e.target.value })}
+            value={currentTrip.title}
+            onChange={(e) => setCurrentTrip({ ...currentTrip, title: e.target.value })}
             margin="normal"
           />
           <TextField
@@ -135,32 +135,32 @@ const Travels = () => {
             label="Description"
             multiline
             rows={3}
-            value={currentTravel.description}
-            onChange={(e) => setCurrentTravel({ ...currentTravel, description: e.target.value })}
+            value={currentTrip.description}
+            onChange={(e) => setCurrentTrip({ ...currentTrip, description: e.target.value })}
             margin="normal"
           />
           <TextField
             fullWidth
             label="Price"
             type="number"
-            value={currentTravel.price}
-            onChange={(e) => setCurrentTravel({ ...currentTravel, price: e.target.value })}
+            value={currentTrip.price}
+            onChange={(e) => setCurrentTrip({ ...currentTrip, price: e.target.value })}
             margin="normal"
           />
           <TextField
             fullWidth
             label="Duration (Days)"
             type="number"
-            value={currentTravel.durationDays}
-            onChange={(e) => setCurrentTravel({ ...currentTravel, durationDays: e.target.value })}
+            value={currentTrip.durationDays}
+            onChange={(e) => setCurrentTrip({ ...currentTrip, durationDays: e.target.value })}
             margin="normal"
           />
           <TextField
             fullWidth
             label="Start Date"
             type="date"
-            value={currentTravel.startDate}
-            onChange={(e) => setCurrentTravel({ ...currentTravel, startDate: e.target.value })}
+            value={currentTrip.startDate}
+            onChange={(e) => setCurrentTrip({ ...currentTrip, startDate: e.target.value })}
             margin="normal"
             InputLabelProps={{ shrink: true }}
           />
@@ -168,8 +168,8 @@ const Travels = () => {
             fullWidth
             label="End Date"
             type="date"
-            value={currentTravel.endDate}
-            onChange={(e) => setCurrentTravel({ ...currentTravel, endDate: e.target.value })}
+            value={currentTrip.endDate}
+            onChange={(e) => setCurrentTrip({ ...currentTrip, endDate: e.target.value })}
             margin="normal"
             InputLabelProps={{ shrink: true }}
           />
@@ -177,15 +177,15 @@ const Travels = () => {
             fullWidth
             label="Max Participants"
             type="number"
-            value={currentTravel.maxParticipants}
-            onChange={(e) => setCurrentTravel({ ...currentTravel, maxParticipants: e.target.value })}
+            value={currentTrip.maxParticipants}
+            onChange={(e) => setCurrentTrip({ ...currentTrip, maxParticipants: e.target.value })}
             margin="normal"
           />
           <FormControl fullWidth margin="normal">
             <InputLabel>Status</InputLabel>
             <Select
-              value={currentTravel.status}
-              onChange={(e) => setCurrentTravel({ ...currentTravel, status: e.target.value })}
+              value={currentTrip.status}
+              onChange={(e) => setCurrentTrip({ ...currentTrip, status: e.target.value })}
             >
               <MenuItem value="active">Active</MenuItem>
               <MenuItem value="inactive">Inactive</MenuItem>
@@ -203,4 +203,4 @@ const Travels = () => {
   );
 };
 
-export default Travels;
+export default Trips;

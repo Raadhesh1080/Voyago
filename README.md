@@ -89,7 +89,7 @@
 | **API Gateway** | 3009 (local) / 3000 (Docker) | Request routing, JWT verification, rate limiting |
 | **Auth Service** | 3001 | Registration, login, token verification |
 | **User Service** | 3002 | User CRUD, role management |
-| **Trip Service** | 3003 | Travel packages, destinations, accommodations |
+| **Trip Service** | 3003 | Trip packages, destinations, accommodations |
 | **Payment Service** | 3004 | Stripe & PayPal integration, payment methods |
 | **Admin Dashboard** | 3005 (Docker) | React SPA served via Nginx |
 
@@ -257,15 +257,15 @@ curl -X POST http://localhost:3009/api/auth/login \
 | `PUT` | `/api/users/:id` | Update user |
 | `DELETE` | `/api/users/:id` | Delete user |
 
-### Travels
+### Trips
 
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| `GET` | `/api/travels` | Public | List travel packages |
-| `GET` | `/api/travels/:id` | Public | Get travel details |
-| `POST` | `/api/travels` | Admin | Create travel package |
-| `PUT` | `/api/travels/:id` | Admin | Update travel package |
-| `DELETE` | `/api/travels/:id` | Admin | Delete travel package |
+| `GET` | `/api/trips` | Public | List trip packages |
+| `GET` | `/api/trips/:id` | Public | Get trip details |
+| `POST` | `/api/trips` | Admin | Create trip package |
+| `PUT` | `/api/trips/:id` | Admin | Update trip package |
+| `DELETE` | `/api/trips/:id` | Admin | Delete trip package |
 
 ### Destinations _(Admin only)_
 
@@ -311,7 +311,7 @@ users
 ├── phone, is_active
 └── created_at / updated_at
 
-travels
+trips
 ├── id (UUID, PK)
 ├── title, description
 ├── price, duration_days
@@ -319,18 +319,18 @@ travels
 ├── max_participants / current_participants
 └── status  ('active' | 'inactive' | 'cancelled' | 'completed')
 
-destinations       → travel_destinations (many-to-many join)
-accommodations     → belongs to travel
-transportation     → belongs to travel
-activities         → belongs to travel
-bookings           → user × travel
+destinations       → trip_destinations (many-to-many join)
+accommodations     → belongs to trip
+transportation     → belongs to trip
+activities         → belongs to trip
+bookings           → user × trip
 payments           → booking × payment_method
 payment_methods    → Stripe / PayPal config
 ```
 
 ### Neo4j (Graph)
 
-Used for graph-based relationship queries between travel destinations, routes, and recommendations.
+Used for graph-based relationship queries between trip destinations, routes, and recommendations.
 
 ---
 
@@ -342,7 +342,7 @@ Built with **React 18** and **Material-UI v5**.
 
 - JWT-based authentication with protected routes
 - Users — full CRUD with role and status management
-- Travels — full CRUD with date pickers and status control
+- Trips — full CRUD with date pickers and status control
 - Payment Methods — Stripe & PayPal configuration management
 - Toast notifications for all actions
 - Responsive layout with collapsible sidebar

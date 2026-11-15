@@ -17,10 +17,10 @@ Stores user accounts with authentication and role information.
 
 **Relationships:**
 - One-to-many with bookings (CASCADE DELETE)
-- One-to-many with travels (SET NULL on delete)
+- One-to-many with trips (SET NULL on delete)
 
-### Travels Table
-Main travel packages.
+### Trips Table
+Main trip packages.
 
 **Columns:**
 - `id` (UUID, PK)
@@ -33,14 +33,14 @@ Main travel packages.
 - `created_by` (UUID, FK): References users
 
 **Relationships:**
-- Many-to-many with destinations via travel_destinations
+- Many-to-many with destinations via trip_destinations
 - One-to-many with accommodations (CASCADE DELETE)
 - One-to-many with transportation (CASCADE DELETE)
 - One-to-many with activities (CASCADE DELETE)
 - One-to-many with bookings (CASCADE DELETE)
 
 ### Destinations Table
-Travel destinations/locations.
+Trip destinations/locations.
 
 **Columns:**
 - `id` (UUID, PK)
@@ -48,56 +48,56 @@ Travel destinations/locations.
 - `description` (TEXT)
 - `image_url` (VARCHAR)
 
-### Travel_Destinations Table
-Junction table for travels and destinations.
+### Trip_Destinations Table
+Junction table for trips and destinations.
 
 **Columns:**
 - `id` (UUID, PK)
-- `travel_id` (UUID, FK): References travels (CASCADE DELETE)
+- `trip_id` (UUID, FK): References trips (CASCADE DELETE)
 - `destination_id` (UUID, FK): References destinations (CASCADE DELETE)
 - `day_number` (INTEGER): Day of visit in itinerary
 
 **Constraints:**
-- UNIQUE(travel_id, destination_id, day_number)
+- UNIQUE(trip_id, destination_id, day_number)
 
 ### Accommodations Table
-Hotel/lodging information for travels.
+Hotel/lodging information for trips.
 
 **Columns:**
 - `id` (UUID, PK)
-- `travel_id` (UUID, FK): References travels (CASCADE DELETE)
+- `trip_id` (UUID, FK): References trips (CASCADE DELETE)
 - `name`, `type`, `address` (VARCHAR/TEXT)
 - `check_in_date`, `check_out_date` (DATE)
 
 ### Transportation Table
-Travel transportation details.
+Trip transportation details.
 
 **Columns:**
 - `id` (UUID, PK)
-- `travel_id` (UUID, FK): References travels (CASCADE DELETE)
+- `trip_id` (UUID, FK): References trips (CASCADE DELETE)
 - `type` (VARCHAR): Flight, train, bus, etc.
 - `departure_location`, `arrival_location` (VARCHAR)
 - `departure_time`, `arrival_time` (TIMESTAMP)
 - `provider` (VARCHAR): Airline/company name
 
 ### Activities Table
-Activities included in travel packages.
+Activities included in trip packages.
 
 **Columns:**
 - `id` (UUID, PK)
-- `travel_id` (UUID, FK): References travels (CASCADE DELETE)
+- `trip_id` (UUID, FK): References trips (CASCADE DELETE)
 - `name`, `description` (VARCHAR/TEXT)
 - `duration_hours` (INTEGER)
 - `price` (DECIMAL): Additional cost if any
 - `scheduled_time` (TIMESTAMP)
 
 ### Bookings Table
-User travel bookings.
+User trip bookings.
 
 **Columns:**
 - `id` (UUID, PK)
 - `user_id` (UUID, FK): References users (CASCADE DELETE)
-- `travel_id` (UUID, FK): References travels (CASCADE DELETE)
+- `trip_id` (UUID, FK): References trips (CASCADE DELETE)
 - `status` (VARCHAR): 'pending', 'confirmed', 'cancelled', 'completed'
 - `total_amount` (DECIMAL)
 - `participants` (INTEGER): Number of people
@@ -145,13 +145,13 @@ Payment transactions.
 ```cypher
 (:Destination)-[:CONNECTS_TO {
   distance_km: Integer,
-  travel_time_hours: Float
+  transit_time_hours: Float
 }]->(:Destination)
 ```
 
 **Use Cases:**
-- Find optimal travel routes between destinations
-- Calculate total travel distance for multi-destination packages
+- Find optimal trip routes between destinations
+- Calculate total trip distance for multi-destination packages
 - Recommend popular destination combinations
 - Analyze destination connectivity
 
@@ -160,10 +160,10 @@ Payment transactions.
 **PostgreSQL:**
 - `idx_users_email`: Fast user lookup by email
 - `idx_users_role`: Filter users by role
-- `idx_travels_status`: Filter travels by status
-- `idx_travels_dates`: Date range queries
+- `idx_trips_status`: Filter trips by status
+- `idx_trips_dates`: Date range queries
 - `idx_bookings_user`: User's bookings
-- `idx_bookings_travel`: Travel's bookings
+- `idx_bookings_trip`: Trip's bookings
 - `idx_payments_booking`: Payment lookup
 - `idx_payments_status`: Payment status filtering
 
@@ -177,10 +177,10 @@ Payment transactions.
 **DELETE User:**
 - Deletes all user's bookings
 - Deletes all payments for those bookings
-- Sets travels.created_by to NULL
+- Sets trips.created_by to NULL
 
-**DELETE Travel:**
-- Deletes all travel_destinations entries
+**DELETE Trip:**
+- Deletes all trip_destinations entries
 - Deletes all accommodations
 - Deletes all transportation
 - Deletes all activities
@@ -188,7 +188,7 @@ Payment transactions.
 - Deletes all payments for those bookings
 
 **DELETE Destination:**
-- Deletes all travel_destinations entries (removes from travel packages)
+- Deletes all trip_destinations entries (removes from trip packages)
 
 **DELETE Payment Method:**
 - Sets payments.payment_method_id to NULL (preserves payment history)

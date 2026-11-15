@@ -27,8 +27,8 @@ CREATE TABLE destinations (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Travels table
-CREATE TABLE travels (
+-- Trips table
+CREATE TABLE trips (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     title VARCHAR(255) NOT NULL,
     description TEXT,
@@ -44,19 +44,19 @@ CREATE TABLE travels (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Travel destinations (many-to-many)
-CREATE TABLE travel_destinations (
+-- Trip destinations (many-to-many)
+CREATE TABLE trip_destinations (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    travel_id UUID REFERENCES travels(id) ON DELETE CASCADE,
+    trip_id UUID REFERENCES trips(id) ON DELETE CASCADE,
     destination_id UUID REFERENCES destinations(id) ON DELETE CASCADE,
     day_number INTEGER NOT NULL,
-    UNIQUE(travel_id, destination_id, day_number)
+    UNIQUE(trip_id, destination_id, day_number)
 );
 
 -- Accommodations table
 CREATE TABLE accommodations (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    travel_id UUID REFERENCES travels(id) ON DELETE CASCADE,
+    trip_id UUID REFERENCES trips(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     type VARCHAR(50) NOT NULL,
     address TEXT,
@@ -68,7 +68,7 @@ CREATE TABLE accommodations (
 -- Transportation table
 CREATE TABLE transportation (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    travel_id UUID REFERENCES travels(id) ON DELETE CASCADE,
+    trip_id UUID REFERENCES trips(id) ON DELETE CASCADE,
     type VARCHAR(50) NOT NULL,
     departure_location VARCHAR(255) NOT NULL,
     arrival_location VARCHAR(255) NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE transportation (
 -- Activities table
 CREATE TABLE activities (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    travel_id UUID REFERENCES travels(id) ON DELETE CASCADE,
+    trip_id UUID REFERENCES trips(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     description TEXT,
     duration_hours INTEGER,
@@ -94,7 +94,7 @@ CREATE TABLE activities (
 CREATE TABLE bookings (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    travel_id UUID REFERENCES travels(id) ON DELETE CASCADE,
+    trip_id UUID REFERENCES trips(id) ON DELETE CASCADE,
     status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'confirmed', 'cancelled', 'completed')),
     total_amount DECIMAL(10, 2) NOT NULL,
     participants INTEGER NOT NULL,
@@ -130,10 +130,10 @@ CREATE TABLE payments (
 -- Indexes
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_role ON users(role);
-CREATE INDEX idx_travels_status ON travels(status);
-CREATE INDEX idx_travels_dates ON travels(start_date, end_date);
+CREATE INDEX idx_trips_status ON trips(status);
+CREATE INDEX idx_trips_dates ON trips(start_date, end_date);
 CREATE INDEX idx_bookings_user ON bookings(user_id);
-CREATE INDEX idx_bookings_travel ON bookings(travel_id);
+CREATE INDEX idx_bookings_trip ON bookings(trip_id);
 CREATE INDEX idx_payments_booking ON payments(booking_id);
 CREATE INDEX idx_payments_status ON payments(status);
 
@@ -147,7 +147,7 @@ END;
 $$ language 'plpgsql';
 
 CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_travels_updated_at BEFORE UPDATE ON travels FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_trips_updated_at BEFORE UPDATE ON trips FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_bookings_updated_at BEFORE UPDATE ON bookings FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_payments_updated_at BEFORE UPDATE ON payments FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_payment_methods_updated_at BEFORE UPDATE ON payment_methods FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

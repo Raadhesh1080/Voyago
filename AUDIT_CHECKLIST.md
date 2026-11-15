@@ -4,18 +4,18 @@
 
 ### Microservices Architecture
 - [ ] **Q: Describe the microservices architecture implemented**
-  - A: 5 microservices (Auth, User, Travel, Payment, API Gateway) with clear domain boundaries
+  - A: 5 microservices (Auth, User, Trip, Payment, API Gateway) with clear domain boundaries
   - Each service has independent database access, logging, and tracing
   - API Gateway handles routing, authentication, and rate limiting
   - Services communicate via HTTP REST APIs
   - Each service is containerized and independently deployable
 
 - [ ] **Q: Are boundaries clearly defined based on business domains?**
-  - A: Yes - Auth (authentication), User (user management), Travel (travel operations), Payment (payment processing)
+  - A: Yes - Auth (authentication), User (user management), Trip (trip operations), Payment (payment processing)
   - Each service owns its domain logic and data
 
 - [ ] **Q: Do microservices align with specific business functions?**
-  - A: Yes - Auth handles authentication/authorization, User manages users, Travel manages packages/destinations, Payment handles transactions
+  - A: Yes - Auth handles authentication/authorization, User manages users, Trip manages packages/destinations, Payment handles transactions
 
 - [ ] **Q: Are microservices designed to operate independently?**
   - A: Yes - Each service has its own codebase, dependencies, and can run standalone
@@ -102,9 +102,9 @@
 - [ ] **Q: Explain PostgreSQL schema**
   - A: database/postgres/init.sql contains:
     - users: Authentication and profiles
-    - travels: Travel packages
+    - trips: Trip packages
     - destinations: Locations
-    - travel_destinations: Many-to-many junction
+    - trip_destinations: Many-to-many junction
     - accommodations: Hotels/lodging
     - transportation: Flights/trains/buses
     - activities: Tour activities
@@ -118,14 +118,14 @@
 - [ ] **Q: Explain Neo4j schema**
   - A: database/neo4j/init.cypher contains:
     - Destination nodes with properties (id, name, country, popularity)
-    - CONNECTS_TO relationships (distance_km, travel_time_hours)
+    - CONNECTS_TO relationships (distance_km, transit_time_hours)
     - Used for route optimization and destination recommendations
-    - Graph queries for finding optimal travel paths
+    - Graph queries for finding optimal trip paths
 
 - [ ] **Q: Does data structure support application requirements?**
   - A: Yes - All required entities modeled
     - Users with roles
-    - Travels with destinations, dates, pricing
+    - Trips with destinations, dates, pricing
     - Accommodations, transportation, activities
     - Payment methods (Stripe, PayPal)
     - Proper relationships and constraints
@@ -176,20 +176,20 @@
   - Test: DELETE /api/users/:id
   - Expected: 200 OK, user removed, bookings cascaded
 
-- [ ] **Travels - Create**
-  - Test: POST /api/travels with destinations, accommodations
-  - Expected: 201 Created with travel object
+- [ ] **Trips - Create**
+  - Test: POST /api/trips with destinations, accommodations
+  - Expected: 201 Created with trip object
 
-- [ ] **Travels - Read**
-  - Test: GET /api/travels/:id
-  - Expected: 200 OK with full travel details
+- [ ] **Trips - Read**
+  - Test: GET /api/trips/:id
+  - Expected: 200 OK with full trip details
 
-- [ ] **Travels - Update**
-  - Test: PUT /api/travels/:id
-  - Expected: 200 OK with updated travel
+- [ ] **Trips - Update**
+  - Test: PUT /api/trips/:id
+  - Expected: 200 OK with updated trip
 
-- [ ] **Travels - Delete**
-  - Test: DELETE /api/travels/:id
+- [ ] **Trips - Delete**
+  - Test: DELETE /api/trips/:id
   - Expected: 200 OK, cascades to accommodations, transportation, activities
 
 - [ ] **Payment Methods - Create**

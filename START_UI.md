@@ -46,11 +46,11 @@ React will open automatically at **http://localhost:3000**
 - ✅ Form validation
 - ✅ Success/error notifications
 
-### 4. Travels Management
-- ✅ View all travel packages
-- ✅ Add new travel (with dates, price, duration)
-- ✅ Edit travel details
-- ✅ Delete travel
+### 4. Trips Management
+- ✅ View all trip packages
+- ✅ Add new trip (with dates, price, duration)
+- ✅ Edit trip details
+- ✅ Delete trip
 - ✅ Date pickers
 - ✅ Status dropdown
 
@@ -80,9 +80,9 @@ React will open automatically at **http://localhost:3000**
 4. Click "Save"
 5. Verify user appears in table
 
-### Scenario 2: Create a Travel Package
-1. Navigate to "Travels"
-2. Click "Add Travel"
+### Scenario 2: Create a Trip Package
+1. Navigate to "Trips"
+2. Click "Add Trip"
 3. Fill in:
    - Title: European Adventure
    - Description: 10-day tour
@@ -92,7 +92,7 @@ React will open automatically at **http://localhost:3000**
    - End Date: Future date + 10 days
    - Max Participants: 20
 4. Click "Save"
-5. Verify travel appears in table
+5. Verify trip appears in table
 
 ### Scenario 3: Edit & Delete
 1. Click edit icon on any item
@@ -104,7 +104,7 @@ React will open automatically at **http://localhost:3000**
 
 ### Scenario 4: Test Validation
 1. Try to create user with invalid email
-2. Try to create travel with negative price
+2. Try to create trip with negative price
 3. Try to submit empty forms
 4. Verify error messages appear
 
@@ -181,8 +181,8 @@ sudo docker compose -f docker-compose-simple.yml down
 2. Dashboard with sidebar
 3. Users table
 4. Add user dialog
-5. Travels table
-6. Add travel dialog
+5. Trips table
+6. Add trip dialog
 7. Payment methods
 8. Mobile responsive view
 
@@ -196,10 +196,10 @@ sudo docker compose -f docker-compose-simple.yml down
 - [ ] Can create new user
 - [ ] Can edit existing user
 - [ ] Can delete user
-- [ ] Can view all travels
-- [ ] Can create new travel
-- [ ] Can edit travel
-- [ ] Can delete travel
+- [ ] Can view all trips
+- [ ] Can create new trip
+- [ ] Can edit trip
+- [ ] Can delete trip
 - [ ] Can view payment methods
 - [ ] Can manage payment methods
 - [ ] Forms validate input

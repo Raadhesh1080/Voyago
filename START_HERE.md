@@ -43,7 +43,7 @@ Accept the self-signed SSL certificate warning.
 ✅ **5 Microservices**
 - Auth Service (JWT authentication)
 - User Service (User management)
-- Trip Service (Travel packages)
+- Trip Service (Trip packages)
 - Payment Service (Stripe & PayPal)
 - API Gateway (Routing & authorization)
 

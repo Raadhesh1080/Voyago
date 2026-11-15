@@ -40,7 +40,7 @@ app.use((req, res, next) => {
   next();
 });
 
-const travelSchema = Joi.object({
+const tripSchema = Joi.object({
   title: Joi.string().required(),
   description: Joi.string().optional(),
   price: Joi.number().positive().required(),
@@ -81,13 +81,13 @@ app.get('/health', (req, res) => {
   res.json({ status: 'healthy', service: 'trip-service' });
 });
 
-// Get all travels
-app.get('/api/travels', async (req, res) => {
+// Get all trips
+app.get('/api/trips', async (req, res) => {
   try {
     const { page = 1, limit = 10, status } = req.query;
     const offset = (page - 1) * limit;
     
-    let query = 'SELECT * FROM travels';
+    let query = 'SELECT * FROM trips';
     let params = [limit, offset];
     
     if (status) {
@@ -98,38 +98,38 @@ app.get('/api/travels', async (req, res) => {
     query += ' ORDER BY created_at DESC LIMIT $1 OFFSET $2';
     
     const result = await pool.query(query, params);
-    const countResult = await pool.query('SELECT COUNT(*) FROM travels' + (status ? ' WHERE status = $1' : ''), status ? [status] : []);
+    const countResult = await pool.query('SELECT COUNT(*) FROM trips' + (status ? ' WHERE status = $1' : ''), status ? [status] : []);
     
     res.json({
-      travels: result.rows,
+      trips: result.rows,
       total: parseInt(countResult.rows[0].count),
       page: parseInt(page),
       limit: parseInt(limit)
     });
   } catch (err) {
     logger.error({ error: err.message });
-    res.status(500).json({ error: 'Failed to fetch travels' });
+    res.status(500).json({ error: 'Failed to fetch trips' });
   }
 });
 
-// Get travel by ID
-app.get('/api/travels/:id', async (req, res) => {
+// Get trip by ID
+app.get('/api/trips/:id', async (req, res) => {
   try {
-    const travelResult = await pool.query('SELECT * FROM travels WHERE id = $1', [req.params.id]);
+    const tripResult = await pool.query('SELECT * FROM trips WHERE id = $1', [req.params.id]);
     
-    if (travelResult.rows.length === 0) return res.status(404).json({ error: 'Travel not found' });
+    if (tripResult.rows.length === 0) return res.status(404).json({ error: 'Trip not found' });
     
-    const travel = travelResult.rows[0];
+    const trip = tripResult.rows[0];
     
     const [destinations, accommodations, transportation, activities] = await Promise.all([
-      pool.query('SELECT td.*, d.name, d.country, d.city FROM travel_destinations td JOIN destinations d ON td.destination_id = d.id WHERE td.travel_id = $1', [req.params.id]),
-      pool.query('SELECT * FROM accommodations WHERE travel_id = $1', [req.params.id]),
-      pool.query('SELECT * FROM transportation WHERE travel_id = $1', [req.params.id]),
-      pool.query('SELECT * FROM activities WHERE travel_id = $1', [req.params.id])
+      pool.query('SELECT td.*, d.name, d.country, d.city FROM trip_destinations td JOIN destinations d ON td.destination_id = d.id WHERE td.trip_id = $1', [req.params.id]),
+      pool.query('SELECT * FROM accommodations WHERE trip_id = $1', [req.params.id]),
+      pool.query('SELECT * FROM transportation WHERE trip_id = $1', [req.params.id]),
+      pool.query('SELECT * FROM activities WHERE trip_id = $1', [req.params.id])
     ]);
     
     res.json({
-      ...travel,
+      ...trip,
       destinations: destinations.rows,
       accommodations: accommodations.rows,
       transportation: transportation.rows,
@@ -137,33 +137,33 @@ app.get('/api/travels/:id', async (req, res) => {
     });
   } catch (err) {
     logger.error({ error: err.message });
-    res.status(500).json({ error: 'Failed to fetch travel' });
+    res.status(500).json({ error: 'Failed to fetch trip' });
   }
 });
 
-// Create travel
-app.post('/api/travels', async (req, res) => {
+// Create trip
+app.post('/api/trips', async (req, res) => {
   const client = await pool.connect();
   try {
-    const { error, value } = travelSchema.validate(req.body);
+    const { error, value } = tripSchema.validate(req.body);
     if (error) return res.status(400).json({ error: error.details[0].message });
 
     await client.query('BEGIN');
 
     const { title, description, price, durationDays, startDate, endDate, maxParticipants, status = 'active', destinations, accommodations, transportation, activities } = value;
 
-    const travelResult = await client.query(
-      'INSERT INTO travels (title, description, price, duration_days, start_date, end_date, max_participants, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+    const tripResult = await client.query(
+      'INSERT INTO trips (title, description, price, duration_days, start_date, end_date, max_participants, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
       [title, description, price, durationDays, startDate, endDate, maxParticipants, status]
     );
 
-    const travel = travelResult.rows[0];
+    const trip = tripResult.rows[0];
 
     if (destinations) {
       for (const dest of destinations) {
         await client.query(
-          'INSERT INTO travel_destinations (travel_id, destination_id, day_number) VALUES ($1, $2, $3)',
-          [travel.id, dest.destinationId, dest.dayNumber]
+          'INSERT INTO trip_destinations (trip_id, destination_id, day_number) VALUES ($1, $2, $3)',
+          [trip.id, dest.destinationId, dest.dayNumber]
         );
       }
     }
@@ -171,8 +171,8 @@ app.post('/api/travels', async (req, res) => {
     if (accommodations) {
       for (const acc of accommodations) {
         await client.query(
-          'INSERT INTO accommodations (travel_id, name, type, address, check_in_date, check_out_date) VALUES ($1, $2, $3, $4, $5, $6)',
-          [travel.id, acc.name, acc.type, acc.address, acc.checkInDate, acc.checkOutDate]
+          'INSERT INTO accommodations (trip_id, name, type, address, check_in_date, check_out_date) VALUES ($1, $2, $3, $4, $5, $6)',
+          [trip.id, acc.name, acc.type, acc.address, acc.checkInDate, acc.checkOutDate]
         );
       }
     }
@@ -180,8 +180,8 @@ app.post('/api/travels', async (req, res) => {
     if (transportation) {
       for (const trans of transportation) {
         await client.query(
-          'INSERT INTO transportation (travel_id, type, departure_location, arrival_location, departure_time, arrival_time, provider) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-          [travel.id, trans.type, trans.departureLocation, trans.arrivalLocation, trans.departureTime, trans.arrivalTime, trans.provider]
+          'INSERT INTO transportation (trip_id, type, departure_location, arrival_location, departure_time, arrival_time, provider) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+          [trip.id, trans.type, trans.departureLocation, trans.arrivalLocation, trans.departureTime, trans.arrivalTime, trans.provider]
         );
       }
     }
@@ -189,59 +189,59 @@ app.post('/api/travels', async (req, res) => {
     if (activities) {
       for (const act of activities) {
         await client.query(
-          'INSERT INTO activities (travel_id, name, description, duration_hours, price, scheduled_time) VALUES ($1, $2, $3, $4, $5, $6)',
-          [travel.id, act.name, act.description, act.durationHours, act.price, act.scheduledTime]
+          'INSERT INTO activities (trip_id, name, description, duration_hours, price, scheduled_time) VALUES ($1, $2, $3, $4, $5, $6)',
+          [trip.id, act.name, act.description, act.durationHours, act.price, act.scheduledTime]
         );
       }
     }
 
     await client.query('COMMIT');
-    logger.info({ event: 'travel_created', travelId: travel.id });
-    res.status(201).json(travel);
+    logger.info({ event: 'trip_created', tripId: trip.id });
+    res.status(201).json(trip);
   } catch (err) {
     await client.query('ROLLBACK');
     logger.error({ error: err.message });
-    res.status(500).json({ error: 'Failed to create travel' });
+    res.status(500).json({ error: 'Failed to create trip' });
   } finally {
     client.release();
   }
 });
 
-// Update travel
-app.put('/api/travels/:id', async (req, res) => {
+// Update trip
+app.put('/api/trips/:id', async (req, res) => {
   try {
-    const { error, value } = travelSchema.validate(req.body, { stripUnknown: true });
+    const { error, value } = tripSchema.validate(req.body, { stripUnknown: true });
     if (error) return res.status(400).json({ error: error.details[0].message });
 
     const { title, description, price, durationDays, startDate, endDate, maxParticipants, status } = value;
 
     const result = await pool.query(
-      'UPDATE travels SET title = $1, description = $2, price = $3, duration_days = $4, start_date = $5, end_date = $6, max_participants = $7, status = $8 WHERE id = $9 RETURNING *',
+      'UPDATE trips SET title = $1, description = $2, price = $3, duration_days = $4, start_date = $5, end_date = $6, max_participants = $7, status = $8 WHERE id = $9 RETURNING *',
       [title, description, price, durationDays, startDate, endDate, maxParticipants, status, req.params.id]
     );
 
-    if (result.rows.length === 0) return res.status(404).json({ error: 'Travel not found' });
+    if (result.rows.length === 0) return res.status(404).json({ error: 'Trip not found' });
 
-    logger.info({ event: 'travel_updated', travelId: req.params.id });
+    logger.info({ event: 'trip_updated', tripId: req.params.id });
     res.json(result.rows[0]);
   } catch (err) {
     logger.error({ error: err.message });
-    res.status(500).json({ error: 'Failed to update travel' });
+    res.status(500).json({ error: 'Failed to update trip' });
   }
 });
 
-// Delete travel
-app.delete('/api/travels/:id', async (req, res) => {
+// Delete trip
+app.delete('/api/trips/:id', async (req, res) => {
   try {
-    const result = await pool.query('DELETE FROM travels WHERE id = $1 RETURNING id', [req.params.id]);
+    const result = await pool.query('DELETE FROM trips WHERE id = $1 RETURNING id', [req.params.id]);
     
-    if (result.rows.length === 0) return res.status(404).json({ error: 'Travel not found' });
+    if (result.rows.length === 0) return res.status(404).json({ error: 'Trip not found' });
 
-    logger.info({ event: 'travel_deleted', travelId: req.params.id });
-    res.json({ message: 'Travel deleted successfully' });
+    logger.info({ event: 'trip_deleted', tripId: req.params.id });
+    res.json({ message: 'Trip deleted successfully' });
   } catch (err) {
     logger.error({ error: err.message });
-    res.status(500).json({ error: 'Failed to delete travel' });
+    res.status(500).json({ error: 'Failed to delete trip' });
   }
 });
 

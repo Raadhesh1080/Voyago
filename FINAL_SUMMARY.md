@@ -9,7 +9,7 @@ The complete Voyago with microservices architecture is ready.
 ### ✅ Microservices (5 services)
 - **Auth Service** - JWT authentication (services/auth-service/)
 - **User Service** - User CRUD operations (services/user-service/)
-- **Trip Service** - Travel packages management (services/trip-service/)
+- **Trip Service** - Trip packages management (services/trip-service/)
 - **Payment Service** - Stripe & PayPal integration (services/payment-service/)
 - **API Gateway** - Routing & authorization (services/api-gateway/)
 
@@ -111,7 +111,7 @@ ansible-playbook -i ansible/inventory/hosts ansible/deploy.yml
 - Authentication & authorization service
 - Responsive UI (Chrome & Firefox)
 - Unit tests for all features
-- Travel entries with all required fields
+- Trip entries with all required fields
 
 ✅ **Best Practices**
 - Pull request workflow ready
@@ -142,7 +142,7 @@ voyago/
 ├── services/                    # 5 Microservices
 │   ├── auth-service/           # Authentication
 │   ├── user-service/           # User management
-│   ├── trip-service/         # Travel packages
+│   ├── trip-service/         # Trip packages
 │   ├── payment-service/        # Payments
 │   └── api-gateway/            # API routing
 ├── admin-dashboard/            # React UI

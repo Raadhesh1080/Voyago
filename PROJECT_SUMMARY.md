@@ -9,7 +9,7 @@ A production-ready, microservices-based trip planning platform with comprehensiv
 ### Microservices
 - **Auth Service** (Port 3001): JWT-based authentication & authorization
 - **User Service** (Port 3002): User management with CRUD operations
-- **Trip Service** (Port 3003): Travel packages, destinations, accommodations, transportation, activities
+- **Trip Service** (Port 3003): Trip packages, destinations, accommodations, transportation, activities
 - **Payment Service** (Port 3004): Stripe & PayPal integration, payment methods management
 - **API Gateway** (Port 3000): Request routing, authentication, rate limiting
 
@@ -31,7 +31,7 @@ A production-ready, microservices-based trip planning platform with comprehensiv
 ### Admin Dashboard (React + Material-UI)
 ✅ Responsive design (Chrome & Firefox compatible)
 ✅ User management (CRUD with role-based access)
-✅ Travel package management (with destinations, accommodations, transportation, activities)
+✅ Trip package management (with destinations, accommodations, transportation, activities)
 ✅ Payment methods configuration (Stripe & PayPal)
 ✅ Real-time validation and error handling
 ✅ Secure authentication with JWT
@@ -93,7 +93,7 @@ voyago/
 ├── services/
 │   ├── auth-service/         # Authentication & JWT
 │   ├── user-service/         # User CRUD
-│   ├── trip-service/       # Travel packages & destinations
+│   ├── trip-service/       # Trip packages & destinations
 │   ├── payment-service/      # Payment gateways
 │   └── api-gateway/          # Request routing & auth
 ├── admin-dashboard/          # React admin UI
@@ -139,12 +139,12 @@ chmod +x setup.sh
 
 ### Admin Only
 - CRUD /api/users
-- CRUD /api/travels
+- CRUD /api/trips
 - CRUD /api/destinations
 - CRUD /api/payment-methods
 
 ### Authenticated
-- GET /api/travels
+- GET /api/trips
 - POST /api/payments/stripe
 - POST /api/payments/paypal
 
@@ -189,7 +189,7 @@ chmod +x setup.sh
 ✅ Distributed tracing (Jaeger)
 ✅ Admin dashboard with CRUD operations
 ✅ Cascade update/delete in database
-✅ Travel entries with all required fields
+✅ Trip entries with all required fields
 ✅ Stripe and PayPal support
 ✅ Authentication & authorization service
 ✅ Responsive UI (Chrome & Firefox)

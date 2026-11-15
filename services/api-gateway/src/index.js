@@ -118,13 +118,13 @@ app.use('/api/users', authenticate, requireAdmin, (req, res) => {
   proxyRequest(req, res, process.env.USER_SERVICE_URL || 'http://localhost:3002', '/api/users');
 });
 
-// Protected routes - Travel service
-app.get('/api/travels*', (req, res) => {
-  proxyRequest(req, res, process.env.TRIP_SERVICE_URL || 'http://localhost:3003', '/api/travels');
+// Protected routes - Trip service
+app.get('/api/trips*', (req, res) => {
+  proxyRequest(req, res, process.env.TRIP_SERVICE_URL || 'http://localhost:3003', '/api/trips');
 });
 
-app.use('/api/travels', authenticate, requireAdmin, (req, res) => {
-  proxyRequest(req, res, process.env.TRIP_SERVICE_URL || 'http://localhost:3003', '/api/travels');
+app.use('/api/trips', authenticate, requireAdmin, (req, res) => {
+  proxyRequest(req, res, process.env.TRIP_SERVICE_URL || 'http://localhost:3003', '/api/trips');
 });
 
 app.use('/api/destinations', authenticate, requireAdmin, (req, res) => {

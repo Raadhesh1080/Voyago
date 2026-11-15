@@ -2,12 +2,12 @@ const request = require('supertest');
 const app = require('../src/index');
 
 describe('Trip Service', () => {
-  let travelId;
+  let tripId;
 
-  describe('POST /api/travels', () => {
-    it('should create a new travel', async () => {
+  describe('POST /api/trips', () => {
+    it('should create a new trip', async () => {
       const res = await request(app)
-        .post('/api/travels')
+        .post('/api/trips')
         .send({
           title: 'European Adventure',
           description: 'Explore Europe',
@@ -19,30 +19,30 @@ describe('Trip Service', () => {
         });
       expect(res.statusCode).toBe(201);
       expect(res.body).toHaveProperty('id');
-      travelId = res.body.id;
+      tripId = res.body.id;
     });
   });
 
-  describe('GET /api/travels', () => {
-    it('should get all travels', async () => {
-      const res = await request(app).get('/api/travels');
+  describe('GET /api/trips', () => {
+    it('should get all trips', async () => {
+      const res = await request(app).get('/api/trips');
       expect(res.statusCode).toBe(200);
-      expect(res.body).toHaveProperty('travels');
+      expect(res.body).toHaveProperty('trips');
     });
   });
 
-  describe('GET /api/travels/:id', () => {
-    it('should get travel by id', async () => {
-      const res = await request(app).get(`/api/travels/${travelId}`);
+  describe('GET /api/trips/:id', () => {
+    it('should get trip by id', async () => {
+      const res = await request(app).get(`/api/trips/${tripId}`);
       expect(res.statusCode).toBe(200);
       expect(res.body.title).toBe('European Adventure');
     });
   });
 
-  describe('PUT /api/travels/:id', () => {
-    it('should update travel', async () => {
+  describe('PUT /api/trips/:id', () => {
+    it('should update trip', async () => {
       const res = await request(app)
-        .put(`/api/travels/${travelId}`)
+        .put(`/api/trips/${tripId}`)
         .send({
           title: 'Updated European Adventure',
           description: 'Explore Europe Updated',
@@ -58,9 +58,9 @@ describe('Trip Service', () => {
     });
   });
 
-  describe('DELETE /api/travels/:id', () => {
-    it('should delete travel', async () => {
-      const res = await request(app).delete(`/api/travels/${travelId}`);
+  describe('DELETE /api/trips/:id', () => {
+    it('should delete trip', async () => {
+      const res = await request(app).delete(`/api/trips/${tripId}`);
       expect(res.statusCode).toBe(200);
     });
   });

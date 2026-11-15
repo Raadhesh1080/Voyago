@@ -12,7 +12,7 @@ const Dashboard = () => {
 
   const menuItems = [
     { text: 'Users', icon: <People />, path: '/users' },
-    { text: 'Travels', icon: <Flight />, path: '/travels' },
+    { text: 'Trips', icon: <Flight />, path: '/trips' },
     { text: 'Payment Methods', icon: <Payment />, path: '/payment-methods' }
   ];
 

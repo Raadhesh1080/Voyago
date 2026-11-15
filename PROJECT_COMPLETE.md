@@ -24,7 +24,7 @@
 - ✅ Authorization service (role-based)
 - ✅ Responsive UI (Chrome & Firefox compatible)
 - ✅ Unit tests for all features (Jest)
-- ✅ Travel entries with destinations, dates, activities, accommodation, transportation
+- ✅ Trip entries with destinations, dates, activities, accommodation, transportation
 
 **3. Best Practices & Ecosystem**
 - ✅ Pull request workflow ready
@@ -59,7 +59,7 @@ voyago/
 ├── services/                    # 5 Microservices
 │   ├── auth-service/           # Authentication & JWT
 │   ├── user-service/           # User CRUD
-│   ├── trip-service/         # Travel packages
+│   ├── trip-service/         # Trip packages
 │   ├── payment-service/        # Stripe & PayPal
 │   └── api-gateway/            # Routing & Auth
 ├── admin-dashboard/            # React Admin UI
@@ -154,7 +154,7 @@ cd services/auth-service && npm test
 - Ansible playbooks execute without errors
 - Docker containers properly configured
 - All APIs require admin authentication
-- CRUD operations for users, travels, payments
+- CRUD operations for users, trips, payments
 - Error handling implemented
 - Authentication and authorization robust
 - Load balancing and failover capable

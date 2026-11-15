@@ -102,17 +102,17 @@ Delete user (cascades to bookings).
 
 ### Trip Service
 
-#### GET /api/travels
-Get all travels.
+#### GET /api/trips
+Get all trips.
 
 **Query Parameters:**
 - `page`, `limit`, `status`
 
-#### GET /api/travels/:id
-Get travel details with destinations, accommodations, transportation, and activities.
+#### GET /api/trips/:id
+Get trip details with destinations, accommodations, transportation, and activities.
 
-#### POST /api/travels (Admin Only)
-Create new travel package.
+#### POST /api/trips (Admin Only)
+Create new trip package.
 
 **Request:**
 ```json
@@ -136,11 +136,11 @@ Create new travel package.
 }
 ```
 
-#### PUT /api/travels/:id (Admin Only)
-Update travel.
+#### PUT /api/trips/:id (Admin Only)
+Update trip.
 
-#### DELETE /api/travels/:id (Admin Only)
-Delete travel (cascades to related data).
+#### DELETE /api/trips/:id (Admin Only)
+Delete trip (cascades to related data).
 
 ### Destination Management (Admin Only)
 
@@ -154,7 +154,7 @@ Create destination.
 Update destination.
 
 #### DELETE /api/destinations/:id
-Delete destination (cascades to travel_destinations).
+Delete destination (cascades to trip_destinations).
 
 ### Payment Service
 
