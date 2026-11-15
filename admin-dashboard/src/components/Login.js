@@ -30,7 +30,7 @@ const Login = () => {
       <Box sx={{ mt: 8 }}>
         <Paper elevation={3} sx={{ p: 4 }}>
           <Typography variant="h4" align="center" gutterBottom>
-            Travel Admin Dashboard
+            Voyago Admin Dashboard
           </Typography>
           <form onSubmit={handleSubmit}>
             <TextField

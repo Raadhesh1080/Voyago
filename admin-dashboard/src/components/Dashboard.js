@@ -26,7 +26,7 @@ const Dashboard = () => {
       <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Travel Admin Dashboard
+            Voyago Admin Dashboard
           </Typography>
           <Typography variant="body1" sx={{ mr: 2 }}>
             {user?.first_name} {user?.last_name}
